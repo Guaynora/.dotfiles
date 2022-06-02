@@ -122,6 +122,11 @@ _G.packer_plugins = {
     path = "/home/Guaynora/.local/share/nvim/site/pack/packer/start/nvim-notify",
     url = "https://github.com/rcarriga/nvim-notify"
   },
+  ["nvim-tree.lua"] = {
+    loaded = true,
+    path = "/home/Guaynora/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
+    url = "https://github.com/kyazdani42/nvim-tree.lua"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/Guaynora/.local/share/nvim/site/pack/packer/start/nvim-treesitter",

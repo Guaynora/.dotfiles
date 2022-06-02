@@ -34,6 +34,10 @@ return require('packer').startup(function()
   -- treesitter 
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
+  -- cmp plugins
+  use "hrsh7th/nvim-cmp" -- The completion plugin
+  use "hrsh7th/cmp-nvim-lsp"
+
   --LSP
   use {
     'neovim/nvim-lspconfig',
@@ -45,6 +49,14 @@ return require('packer').startup(function()
    'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
+
+  -- nvim tree
+use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {
+      'kyazdani42/nvim-web-devicons', -- optional, for file icon
+    }
+}
   -- Themes
   use({
           "nvim-lualine/lualine.nvim",

@@ -1,7 +1,7 @@
 require('plugins')
 require('options')
 require('keymaps')
-require('nvim-tree')
+require('nvim-tree-config')
 require('treesitter')
 require('lsp')
 require('lualine-config')

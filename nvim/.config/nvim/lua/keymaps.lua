@@ -25,10 +25,10 @@ keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
-keymap("n", "<leader>e", ":Lex 30<cr>", opts)
+--keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
 -- Resize with arrows
-keymap("n", "<C-Up>", ":resize -2<CR>", opts)
-keymap("n", "<C-Down>", ":resize +2<CR>", opts)
+keymap("n", "<C-Up>", ":resize +2<CR>", opts)
+keymap("n", "<C-Down>", ":resize -2<CR>", opts)
 keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
 keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 
@@ -68,4 +68,10 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 -- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
 -- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
+-- Nvim Tree --
+keymap("n", "<C-n>", ":NvimTreeToggle<cr>", opts)
+keymap("n","<leader>r",":NvimTreeRefresh<cr>", opts)
+keymap("n", "<leader>n", ':NvimTreeFindFile<cr>', opts)
 
+-- a list of groups can be found at `:help nvim_tree_highlight`
+-- highlight NvimTreeFolderIcon guibg=blue

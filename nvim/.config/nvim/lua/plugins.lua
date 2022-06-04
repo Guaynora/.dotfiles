@@ -36,14 +36,24 @@ return require('packer').startup(function()
 
   -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
+  use "hrsh7th/cmp-buffer" -- buffer completions
+  use "hrsh7th/cmp-path" -- path completions
+  use "hrsh7th/cmp-cmdline" -- cmdline completions
+  use "saadparwaiz1/cmp_luasnip" -- snippet completions
   use "hrsh7th/cmp-nvim-lsp"
+
+  -- snipets
+  use "L3MON4D3/LuaSnip" --snippet engine
+  use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
   --LSP
   use {
     'neovim/nvim-lspconfig',
     'williamboman/nvim-lsp-installer',
     }
-
+  use "RRethy/vim-illuminate"
+  use "b0o/SchemaStore.nvim"
+  
   -- Telescope
   use {
    'nvim-telescope/telescope.nvim',

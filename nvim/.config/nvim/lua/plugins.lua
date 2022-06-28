@@ -51,7 +51,8 @@ return require('packer').startup(function()
    'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
-
+  use "tom-anders/telescope-vim-bookmarks.nvim"
+  use "nvim-telescope/telescope-media-files.nvim"
   -- nvim tree
   use {
       'kyazdani42/nvim-tree.lua',

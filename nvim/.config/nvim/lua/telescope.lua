@@ -4,13 +4,16 @@ if not status_ok then
 end
 
 local actions = require "telescope.actions"
+telescope.load_extension "media_files"
+local icons = require "user.icons"
 
 telescope.setup {
   defaults = {
 
-    prompt_prefix = " ",
+    prompt_prefix = icons.ui.Telescope .. " ",
     selection_caret = " ",
     path_display = { "smart" },
+    file_ignore_patterns = { ".git/", "node_modules/", "target/", "docs/", ".settings/" },
 
     mappings = {
       i = {
@@ -26,12 +29,14 @@ telescope.setup {
         ["<Up>"] = actions.move_selection_previous,
 
         ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
+        ["<C-s>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,
         ["<C-t>"] = actions.select_tab,
 
-        ["<C-u>"] = actions.preview_scrolling_up,
-        ["<C-d>"] = actions.preview_scrolling_down,
+        ["<c-d>"] = require("telescope.actions").delete_buffer,
+
+        -- ["<C-u>"] = actions.preview_scrolling_up,
+        -- ["<C-d>"] = actions.preview_scrolling_down,
 
         ["<PageUp>"] = actions.results_scrolling_up,
         ["<PageDown>"] = actions.results_scrolling_down,
@@ -87,11 +92,11 @@ telescope.setup {
     -- builtin picker
   },
   extensions = {
-    -- Your extension configuration goes here:
-    -- extension_name = {
-    --   extension_config_key = value,
-    -- }
-    -- please take a look at the readme of the extension you want to configure
+    media_files = {
+      -- filetypes whitelist
+      -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
+      filetypes = { "png", "webp", "jpg", "jpeg" },
+      find_cmd = "rg", -- find command (defaults to `fd`)
+    },
   },
 }
-

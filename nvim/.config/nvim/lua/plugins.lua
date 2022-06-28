@@ -4,7 +4,6 @@ return require('packer').startup(function()
 
   use {'tpope/vim-dispatch'}
 
-  use({ "kevinhwang91/nvim-bqf", ft = "qf" })
   use({
 		"junegunn/fzf",
 		run = function()
@@ -20,13 +19,6 @@ return require('packer').startup(function()
   use("tpope/vim-vinegar")
   -- usefull for unix functions
   use("tpope/vim-commentary")
-
-  use({
-		"lewis6991/gitsigns.nvim",
-		requires = {
-			"nvim-lua/plenary.nvim",
-		},
-	})
 
   -- Load on an autocommand event
   use {'andymass/vim-matchup', event = 'VimEnter'}
@@ -61,12 +53,15 @@ return require('packer').startup(function()
   }
 
   -- nvim tree
-use {
-    'kyazdani42/nvim-tree.lua',
-    requires = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icon
-    }
-}
+  use {
+      'kyazdani42/nvim-tree.lua',
+      requires = {
+        'kyazdani42/nvim-web-devicons', -- optional, for file icon
+      }
+  }
+  -- git
+  use 'lewis6991/gitsigns.nvim'
+
   -- Themes
   use({
           "nvim-lualine/lualine.nvim",

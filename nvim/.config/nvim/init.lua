@@ -1,6 +1,7 @@
 require('plugins')
 require('options')
 require('keymaps')
+require('gitsigns')
 require('nvim-tree-config')
 require('treesitter')
 require('lsp')

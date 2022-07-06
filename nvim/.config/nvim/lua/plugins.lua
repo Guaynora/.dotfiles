@@ -1,7 +1,11 @@
+vim.cmd([[packadd packer.nvim]])
+vim.cmd([[autocmd BufWritePost plugins.lua source <afile> | PackerCompile]])
+
 return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
-
+  use("lewis6991/impatient.nvim")
+  use("tjdevries/colorbuddy.nvim")
   use {'tpope/vim-dispatch'}
 
   use({
@@ -17,6 +21,8 @@ return require('packer').startup(function()
   use("tpope/vim-dotenv")
   use("tpope/vim-fugitive")
   use("tpope/vim-vinegar")
+  use "b0o/SchemaStore.nvim"
+  use "RRethy/vim-illuminate"
   -- usefull for unix functions
   use("tpope/vim-commentary")
 
@@ -24,35 +30,60 @@ return require('packer').startup(function()
   use {'andymass/vim-matchup', event = 'VimEnter'}
 
   -- treesitter 
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use({
+		"nvim-treesitter/nvim-treesitter",
+		run = ":TSUpdate",
+		requires = {
+			"nvim-treesitter/playground",
+			"nvim-treesitter/nvim-treesitter-refactor",
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
+	})
 
-  -- cmp plugins
-  use "hrsh7th/nvim-cmp" -- The completion plugin
-  use "hrsh7th/cmp-buffer" -- buffer completions
-  use "hrsh7th/cmp-path" -- path completions
-  use "hrsh7th/cmp-cmdline" -- cmdline completions
-  use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  use "hrsh7th/cmp-nvim-lsp"
-
-  -- snipets
-  use "L3MON4D3/LuaSnip" --snippet engine
-  use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
+  -- completition 
+  use({
+      "hrsh7th/nvim-cmp",
+      requires = {
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-cmdline",
+        "saadparwaiz1/cmp_luasnip",
+        "onsails/lspkind-nvim",
+        "L3MON4D3/LuaSnip",
+        "windwp/nvim-autopairs",
+        "rafamadriz/friendly-snippets",
+      },
+  })
 
   --LSP
-  use {
-    'neovim/nvim-lspconfig',
-    'williamboman/nvim-lsp-installer',
-    }
-  use "RRethy/vim-illuminate"
-  use "b0o/SchemaStore.nvim"
+
+  use({
+      "neovim/nvim-lspconfig",
+      "williamboman/nvim-lsp-installer",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
+      "jose-elias-alvarez/null-ls.nvim",
+  })
+
   
   -- Telescope
-  use {
-   'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
-  }
-  use "tom-anders/telescope-vim-bookmarks.nvim"
-  use "nvim-telescope/telescope-media-files.nvim"
+  use({
+      "nvim-telescope/telescope.nvim",
+      requires = {
+        { "nvim-lua/plenary.nvim" },
+        { "nvim-lua/popup.nvim" },
+        { "nvim-telescope/telescope-fzy-native.nvim" },
+        { "nvim-telescope/telescope-media-files.nvim" },
+        { "tom-anders/telescope-vim-bookmarks.nvim" },
+        { "kyazdani42/nvim-web-devicons" },
+        { "nvim-telescope/telescope-file-browser.nvim" },
+        { "nvim-telescope/telescope-dap.nvim" },
+        { "nvim-telescope/telescope-ui-select.nvim" },
+        { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
+      },
+  })
+
   -- nvim tree
   use {
       'kyazdani42/nvim-tree.lua',

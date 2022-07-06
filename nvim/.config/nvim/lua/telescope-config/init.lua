@@ -1,98 +1,139 @@
-local status_ok, telescope = pcall(require, "telescope")
-if not status_ok then
-  return
+SHOULD_RELOAD_TELESCOPE = true
+
+local reloader = function()
+	if SHOULD_RELOAD_TELESCOPE then
+		RELOAD("plenary")
+		RELOAD("telescope")
+		RELOAD("alpha.telescope.setup")
+	end
 end
 
-local actions = require "telescope.actions"
+local action_state = require("telescope.actions.state")
+local fb_actions = require("telescope").extensions.file_browser.actions
+local actions = require("telescope.actions")
 
-telescope.setup {
-  defaults = {
-    selection_caret = " ",
-    path_display = { "smart" },
-    file_ignore_patterns = { ".git/", "node_modules/", "target/", "docs/", ".settings/" },
+local M = {}
 
-    mappings = {
-      i = {
-        ["<C-n>"] = actions.cycle_history_next,
-        ["<C-p>"] = actions.cycle_history_prev,
+function M.project_files()
+	local opts = {} -- define here if you want to define something
+	local ok = pcall(require("telescope.builtin").git_files, opts)
+	if not ok then
+		require("telescope.builtin").find_files(opts)
+	end
+end
 
-        ["<C-j>"] = actions.move_selection_next,
-        ["<C-k>"] = actions.move_selection_previous,
+function M.branches()
+	require("telescope.builtin").git_branches({
+		attach_mappings = function(_, map)
+			map("i", "<c-j>", actions.git_create_branch)
+			map("n", "<c-j>", actions.git_create_branch)
+			return true
+		end,
+	})
+end
 
-        ["<C-c>"] = actions.close,
+function M.search_config()
+	require("telescope.builtin").git_files({
+		prompt_title = "< dotfiles >",
+		cwd = "$HOME/.dotfiles",
+	})
+end
 
-        ["<Down>"] = actions.move_selection_next,
-        ["<Up>"] = actions.move_selection_previous,
+function M.grep_string()
+	vim.ui.input("Grep for > ", function(input)
+		if input == nil then
+			return
+		end
+		require("telescope.builtin").grep_string({ search = input })
+	end)
+end
 
-        ["<CR>"] = actions.select_default,
-        ["<C-s>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        ["<C-t>"] = actions.select_tab,
+function M.grep_word()
+	require("telescope.builtin").grep_string({ search = vim.fn.expand("<cword>") })
+end
 
-        ["<c-d>"] = require("telescope.actions").delete_buffer,
+function M.find_symbol()
+	vim.ui.input("Symbol for > ", function(input)
+		if input == nil then
+			return
+		end
+		require("telescope.builtin").lsp_workspace_symbols({ query = input })
+	end)
+end
 
-        -- ["<C-u>"] = actions.preview_scrolling_up,
-        -- ["<C-d>"] = actions.preview_scrolling_down,
+function M.my_plugins()
+	require("telescope.builtin").find_files({
+		cwd = "~/plugins/",
+	})
+end
 
-        ["<PageUp>"] = actions.results_scrolling_up,
-        ["<PageDown>"] = actions.results_scrolling_down,
+function M.projectionist()
+	return require("telescope").extensions.projectionist.projectionist()
+end
 
-        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["<C-l>"] = actions.complete_tag,
-        ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
-      },
+function M.worktree()
+	return require("telescope").extensions.git_worktree.git_worktrees()
+end
 
-      n = {
-        ["<esc>"] = actions.close,
-        ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        ["<C-t>"] = actions.select_tab,
+function M.worktree_create()
+	return require("telescope").extensions.git_worktree.create_git_worktree()
+end
 
-        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+function M.file_browser_relative()
+	return M.file_browser({ path = "%:p:h" })
+end
 
-        ["j"] = actions.move_selection_next,
-        ["k"] = actions.move_selection_previous,
-        ["H"] = actions.move_to_top,
-        ["M"] = actions.move_to_middle,
-        ["L"] = actions.move_to_bottom,
+function M.file_browser(opts)
+	opts = opts or {}
 
-        ["<Down>"] = actions.move_selection_next,
-        ["<Up>"] = actions.move_selection_previous,
-        ["gg"] = actions.move_to_top,
-        ["G"] = actions.move_to_bottom,
+	opts = {
+		path = opts.path,
+		sorting_strategy = "ascending",
+		scroll_strategy = "cycle",
+		layout_config = {
+			prompt_position = "top",
+		},
 
-        ["<C-u>"] = actions.preview_scrolling_up,
-        ["<C-d>"] = actions.preview_scrolling_down,
+		attach_mappings = function(prompt_bufnr, map)
+			local current_picker = action_state.get_current_picker(prompt_bufnr)
 
-        ["<PageUp>"] = actions.results_scrolling_up,
-        ["<PageDown>"] = actions.results_scrolling_down,
+			local modify_cwd = function(new_cwd)
+				local finder = current_picker.finder
 
-        ["?"] = actions.which_key,
-      },
-    },
-  },
-  pickers = {
-    -- Default configuration for builtin pickers goes here:
-    -- picker_name = {
-    --   picker_config_key = value,
-    --   ...
-    -- }
-    -- Now the picker_config_key will be applied every time you call this
-    -- builtin picker
-  },
-  extensions = {
-    media_files = {
-      -- filetypes whitelist
-      -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
-      filetypes = { "png", "webp", "jpg", "jpeg" },
-      find_cmd = "rg", -- find command (defaults to `fd`)
-    },
-  },
-}
+				finder.path = new_cwd
+				finder.files = true
+				current_picker:refresh(false, { reset_prompt = true })
+			end
+
+			map("n", "-", function()
+				modify_cwd(current_picker.cwd .. "/..")
+			end)
+
+			map("i", "~", function()
+				modify_cwd(vim.fn.expand("~"))
+			end)
+
+			map("n", "yy", function()
+				local entry = action_state.get_selected_entry()
+				vim.fn.setreg("+", entry.value)
+			end)
+
+			map("i", "<c-y>", fb_actions.create)
+
+			return true
+		end,
+	}
+
+	return require("telescope").extensions.file_browser.file_browser(opts)
+end
+
+return setmetatable({}, {
+	__index = function(_, k)
+		reloader()
+		if M[k] then
+			return M[k]
+		else
+			return require("telescope.builtin")[k]
+		end
+	end,
+})

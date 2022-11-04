@@ -1,19 +1,16 @@
-pcall(require, "impatient")
-if require "first_load" () then
-  return
-end
-
-vim.g.mapleader = " "
-require('plugins')
-
--- require('options')
-require('keymaps')
-require('globals')
-require('gitsigns-config')
-require('nvim-tree-config')
-require('lualine-config')
-require('telescope-config')
-require('telescope-config.setup')
-require('telescope-config.mappings')
-require('completions')
-vim.cmd("colorscheme nightfox")
+require("guaynora.plugins-setup")
+require("guaynora.core.options")
+require("guaynora.core.keymaps")
+require("guaynora.core.colorscheme")
+require("guaynora.plugins.comment")
+require("guaynora.plugins.nvim-tree")
+require("guaynora.plugins.lualine")
+require("guaynora.plugins.telescope")
+require("guaynora.plugins.nvim-cmp")
+require("guaynora.plugins.lsp.mason")
+require("guaynora.plugins.lsp.lspsaga")
+require("guaynora.plugins.lsp.lspconfig")
+require("guaynora.plugins.lsp.null-ls")
+require("guaynora.plugins.autopairs")
+require("guaynora.plugins.treesitter")
+require("guaynora.plugins.gitsigns")
